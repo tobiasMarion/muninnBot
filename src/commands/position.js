@@ -1,16 +1,26 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('@discordjs/builders')
+const CommandsController = require('../controllers/CommandsController')
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('position')
 		.setDescription('Display info about yourself.')
-		.addStringOption(option =>
-			option.setName('input')
-				.setDescription('The input to echo back')
-				.setRequired(true)),
+		.addUserOption(option =>
+			option.setName('member')
+				.setDescription('The member to be searched')),
 
 	async execute(interaction) {
-		console.log(interaction.options._hoistedOptions[0])
-		return interaction.reply(`Your username: ${interaction.user.username}\nYour ID: ${interaction.user.id}`);
+		const serverId = interaction.guild.id
+		let memberId = interaction.options._hoistedOptions[0]
+
+		if (!memberId) {
+			memberId = interaction.user.id
+		} else {
+			memberId = memberId.user.id
+		}
+
+		const reply = await CommandsController.position(memberId, serverId)
+		
+		return interaction.reply(reply)
 	},
-};
+}

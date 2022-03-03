@@ -1,16 +1,17 @@
-const { SlashCommandBuilder } = require('@discordjs/builders');
+const { SlashCommandBuilder } = require('@discordjs/builders')
+const CommandsController = require('../controllers/CommandsController')
+
 
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('rank')
-		.setDescription('Display info about yourself.')
-		.addStringOption(option =>
-			option.setName('input')
-				.setDescription('The input to echo back')
-				.setRequired(true)),
+		.setDescription('Display the 10 members with more XP on the server.'),
 
 	async execute(interaction) {
-		console.log(interaction.options._hoistedOptions[0])
-		return interaction.reply(`Your username: ${interaction.user.username}\nYour ID: ${interaction.user.id}`);
+		const serverId = interaction.guild.id
+
+		const reply = await CommandsController.rank(serverId)
+
+		return interaction.reply(reply)
 	},
-};
+}

@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node .",
     "dev": "nodemon .",
-    "commands": "node ./src/deploy-commands.js"
+    "commands": "node ./src/config/deploy-commands.js",
+    "delete-commands": "node ./src/config/delete-commands.js"
   },
   "keywords": [],
   "author": "",
@@ -17,7 +18,8 @@
     "@discordjs/voice": "^0.8.0",
     "discord-api-types": "^0.27.0",
     "discord.js": "^13.6.0",
-    "dotenv": "^16.0.0"
+    "dotenv": "^16.0.0",
+    "mongoose": "^6.2.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

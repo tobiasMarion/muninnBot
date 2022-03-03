@@ -1,45 +1,69 @@
 require('dotenv').config()
-const fs = require('fs')
 
-// Require the necessary discord.js classes
-const { Client, Collection, Intents } = require('discord.js');
+const mongoose = require('mongoose')
+const fs = require('fs')
+const { Client, Collection, Intents } = require('discord.js')
+
+const Server = require('./models/Server')
+
+const VoiceStateUpdate = require('./controllers/VoiceStateUpdateController')
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] });
+const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] })
 
-client.commands = new Collection();
+// Requiring command files
+client.commands = new Collection()
 
-const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'));
+const commandFiles = fs.readdirSync('./src/commands').filter(file => file.endsWith('.js'))
 
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.data.name, command);
+	const command = require(`./commands/${file}`)
+	client.commands.set(command.data.name, command)
 }
 
-client.once('ready', () => {
-	console.log('Ready!');
-});
 
-client.on('interactionCreate', async interaction => {
-	if (!interaction.isCommand()) return;
+// Connect to database
+mongoose.connect(process.env.DB_URI, () =>
+	console.log('   -> Connected to DB')
+)
 
-	const command = client.commands.get(interaction.commandName);
 
-	if (!command) return;
+// Events
+client.once('ready', () => console.log('Running!'))
 
-	try {
-		await command.execute(interaction);
-	} catch (error) {
-		console.error(error);
-		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-	}
-});
-
-client.login(process.env.TOKEN)
+client.on('guildCreate', ({ id }) => {
+	const server = new Server({ _id: id })
+	server.save()
+})
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-	console.log(
-		oldState,
-		newState
-	)
-});
+	if (oldState.channelId === null) {
+		VoiceStateUpdate.join(oldState, newState)
+	}
+	else if (newState.channelId === null) {
+		VoiceStateUpdate.quit(oldState, newState)
+	}
+	else {
+		VoiceStateUpdate.quit(oldState, newState)
+		VoiceStateUpdate.join(oldState, newState)
+	}
+
+})
+
+client.on('interactionCreate', async interaction => {
+	if (!interaction.isCommand()) return
+
+	const command = client.commands.get(interaction.commandName)
+
+	if (!command) return
+
+	try {
+		await command.execute(interaction)
+	} catch (error) {
+		console.error(error)
+		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
+	}
+})
+
+
+client.login(process.env.TOKEN)
