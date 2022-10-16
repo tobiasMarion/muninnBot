@@ -13,5 +13,5 @@ module.exports = {
 		const reply = await CommandsController.rank(serverId)
 
 		return interaction.reply(reply)
-	},
+	}
 }

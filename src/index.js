@@ -2,14 +2,14 @@ require('dotenv').config()
 
 const mongoose = require('mongoose')
 const fs = require('fs')
-const { Client, Collection, Intents } = require('discord.js')
+const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
 
 const Server = require('./models/Server')
 
 const VoiceStateUpdate = require('./controllers/VoiceStateUpdateController')
 
 // Create a new client instance
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_VOICE_STATES] })
+const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
 
 // Requiring command files
 client.commands = new Collection()
@@ -27,9 +27,19 @@ mongoose.connect(process.env.DB_URI, () =>
 	console.log('   -> Connected to DB')
 )
 
+mongoose.connection.on('error', error => console.log(error))
 
 // Events
-client.once('ready', () => console.log('Running!'))
+client.once('ready', () => {
+	client.user.setPresence({
+		activities: [{
+			name: "the 9 worlds",
+			type: "WATCHING"
+		}],
+		status: "idle"
+	})
+	console.log('Running!')
+})
 
 client.on('guildCreate', ({ id }) => {
 	const server = new Server({ _id: id })
@@ -47,7 +57,6 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 		VoiceStateUpdate.quit(oldState, newState)
 		VoiceStateUpdate.join(oldState, newState)
 	}
-
 })
 
 client.on('interactionCreate', async interaction => {
@@ -64,6 +73,5 @@ client.on('interactionCreate', async interaction => {
 		await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true })
 	}
 })
-
 
 client.login(process.env.TOKEN)

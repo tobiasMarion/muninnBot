@@ -25,7 +25,7 @@ module.exports = {
   async rank(serverId) {
     let { members } = await Server.findById(serverId)
 
-    members = this.sortXP(members.slice(0, 10))
+    members = this.sortXP(members).slice(0, 10)
 
     let reply = ':trophy: ***SERVER RANK :trophy:***\n\n'
 

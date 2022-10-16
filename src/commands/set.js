@@ -9,8 +9,10 @@ module.exports = {
 			option.setName('type')
 				.setDescription('The bonus category')
 				.setRequired(true)
-				.addChoice('Video', 'video')
-				.addChoice('Streaming', 'streaming'))
+				.addChoices(
+					{ name: 'Video', value: 'video' },
+					{ name: 'Streaming', value: 'streaming' },
+				))
 		.addNumberOption(option =>
 			option.setName('value')
 				.setDescription('The xp earned will be multiplied by this constant (We recommend values >= 1)')
@@ -23,7 +25,7 @@ module.exports = {
 
 		const memberPermissions = interaction.member.permissions.toArray()
 
-		if (memberPermissions.indexOf('ADMINISTRATOR') >= 0) {
+		if (memberPermissions.indexOf('Administrator') >= 0) {
 			await CommandsController.set(type, value, serverId)
 			return interaction.reply(`The ${type} bonus was set to ${value} succefully.`)
 		} else {
