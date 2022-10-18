@@ -58,18 +58,46 @@ module.exports = {
 
     const members = this.sortXP(server.members)
 
-    const index = members.findIndex(member => member._id == memberId)
+    let index = members.findIndex(member => member._id == memberId)
 
     let reply = ''
 
     if (index >= 0) {
       const member = members[index]
-      const end = index == 0 ? 'st' : index == 1 ? 'nd' : 'rd'
-      reply = `${member.username}#${member.tag} is on ${index + 1}${end} position in the rank`
+      let end = ''
+
+      index++
+
+      switch (index) {
+        case 1:
+          end = 'st'
+          break
+        case 2:
+          end = 'nd'
+          break
+        case 3:
+          end = 'rd'
+          break
+        default:
+          end = 'th'
+      }
+
+      reply = `${member.username}#${member.tag} is on ${index}${end} position in the rank`
     } else {
       reply = 'This user has no XP.'
     }
 
     return reply
+  },
+
+  async reset(serverId) {
+    const server = await Server.findById(serverId)
+
+    server.members.map(member => {
+      member.currentXp = 0
+      return member
+    })
+
+    await server.save()
   }
 }

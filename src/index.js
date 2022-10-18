@@ -2,14 +2,20 @@ require('dotenv').config()
 
 const mongoose = require('mongoose')
 const fs = require('fs')
-const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Partials, Collection } = require('discord.js')
 
 const Server = require('./models/Server')
 
 const VoiceStateUpdate = require('./controllers/VoiceStateUpdateController')
 
 // Create a new client instance
-const client = new Client({ intents: [GatewayIntentBits.Guilds], partials: [Partials.Channel] });
+const client = new Client({ 
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildVoiceStates
+	], 
+	partials: [Partials.Channel] 
+})
 
 // Requiring command files
 client.commands = new Collection()
@@ -20,7 +26,6 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`)
 	client.commands.set(command.data.name, command)
 }
-
 
 // Connect to database
 mongoose.connect(process.env.DB_URI, () =>
@@ -38,7 +43,7 @@ client.once('ready', () => {
 		}],
 		status: "idle"
 	})
-	console.log('Running!')
+	console.log('\nRunning!')
 })
 
 client.on('guildCreate', ({ id }) => {
