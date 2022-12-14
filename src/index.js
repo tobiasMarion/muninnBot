@@ -9,13 +9,15 @@ const Server = require('./models/Server')
 const VoiceStateUpdate = require('./controllers/VoiceStateUpdateController')
 
 // Create a new client instance
-const client = new Client({ 
+const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
 		GatewayIntentBits.GuildVoiceStates
-	], 
-	partials: [Partials.Channel] 
+	],
+	partials: [Partials.Channel]
 })
+
+
 
 // Requiring command files
 client.commands = new Collection()
@@ -26,14 +28,21 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`)
 	client.commands.set(command.data.name, command)
 }
+
 console.log('   -> Commands Imported')
 
-// Connect to database
-mongoose.connect(process.env.DB_URI, () =>
-	console.log('   -> Connected to DB')
-)
 
-mongoose.connection.on('error', error => console.log(error))
+
+// Connect to database
+mongoose.connect(process.env.DB_URI, () => {
+	console.log('   -> Connected to DB')
+})
+
+mongoose.connection.on('error', error => {
+	console.log(error)
+})
+
+
 
 // Events
 client.once('ready', () => {
