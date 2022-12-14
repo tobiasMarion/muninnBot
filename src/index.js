@@ -26,6 +26,7 @@ for (const file of commandFiles) {
 	const command = require(`./commands/${file}`)
 	client.commands.set(command.data.name, command)
 }
+console.log('   -> Commands Imported')
 
 // Connect to database
 mongoose.connect(process.env.DB_URI, () =>
@@ -43,7 +44,7 @@ client.once('ready', () => {
 		}],
 		status: "idle"
 	})
-	console.log('\nRunning!')
+	console.log('Running!')
 })
 
 client.on('guildCreate', ({ id }) => {

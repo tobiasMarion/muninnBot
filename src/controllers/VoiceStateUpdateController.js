@@ -40,6 +40,10 @@ module.exports = {
 
     const member = server.members.id(memberId)
 
+    if (!member) {
+      return
+    }
+
     const { streaming, selfVideo } = oldState
     const now = new Date
 
