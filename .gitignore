@@ -1,6 +1,5 @@
 node_modules
 .env
-notes.md
 *.log
 discloud.config
 upload.zip

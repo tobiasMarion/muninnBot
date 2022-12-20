@@ -51,7 +51,7 @@ client.once('ready', () => {
 			name: "the 9 worlds",
 			type: "WATCHING"
 		}],
-		status: "idle"
+		status: "online"
 	})
 	console.log('Running!')
 })

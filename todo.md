@@ -5,6 +5,7 @@
     - [ ] /rank & /position close member's cicle
     - [ ] Improve command display (using buttons & other features)
     - [ ] Confirm Server Reset
+    - [ ] Config Support Server
 
 ## 💡 Slash Commands & Other Features
     - [ ] /server (returns server current settings)
@@ -14,7 +15,9 @@
     - [ ] /config (a modal to set server bonus)
     - [ ] userUpdate Event
     - [ ] guildScheduledEventUserAdd & guildScheduledEventUserRemove Event
+    - [ ] /position returns current XP
 
 ## Dev Updates
     - [ ] Use Chalk to log
     - [ ] Listen to events using external files
+    - [ ] Comment Code Structure
