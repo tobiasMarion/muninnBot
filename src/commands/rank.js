@@ -9,8 +9,9 @@ module.exports = {
 
 	async execute(interaction) {
 		const serverId = interaction.guild.id
+		const voiceState = interaction.member.voice
 
-		const reply = await CommandsController.rank(serverId)
+		const reply = await CommandsController.rank(serverId, voiceState)
 
 		return interaction.reply(reply)
 	}

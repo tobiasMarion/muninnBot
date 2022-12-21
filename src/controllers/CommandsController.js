@@ -1,3 +1,4 @@
+const VoiceStateUpdateController = require('./VoiceStateUpdateController')
 const Server = require('../models/Server')
 
 module.exports = {
@@ -22,7 +23,13 @@ module.exports = {
     await server.save()
   },
 
-  async rank(serverId) {
+  async rank(serverId, voiceState) {
+
+    if (voiceState.channelId) {
+      await VoiceStateUpdateController.quit(voiceState, voiceState)
+      VoiceStateUpdateController.join(voiceState, voiceState)
+    }
+
     let { members } = await Server.findById(serverId)
 
     members = this.sortXP(members).slice(0, 10)
@@ -53,14 +60,20 @@ module.exports = {
     return reply
   },
 
-  async position(memberId, serverId) {
+  async position(memberId, serverId, voiceState) {
+
+    if (voiceState.channelId) {
+      await VoiceStateUpdateController.quit(voiceState, voiceState)
+      VoiceStateUpdateController.join(voiceState, voiceState)
+    }
+
     const server = await Server.findById(serverId)
 
     const members = this.sortXP(server.members)
 
     let index = members.findIndex(member => member._id == memberId)
 
-    let reply = ''
+    let reply
 
     if (index >= 0) {
       const member = members[index]
@@ -68,7 +81,7 @@ module.exports = {
 
       index++
 
-      switch (index) {
+      switch (index % 10) {
         case 1:
           end = 'st'
           break
@@ -82,7 +95,7 @@ module.exports = {
           end = 'th'
       }
 
-      reply = `${member.username}#${member.tag} is on ${index}${end} position in the rank`
+      reply = `${member.username}#${member.tag} is on *${index}${end} position* in the rank with *${member.currentXp.toLocaleString()} XP*.`
     } else {
       reply = 'This user has no XP.'
     }
