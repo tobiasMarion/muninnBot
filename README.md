@@ -2,7 +2,7 @@
 # Muninn Bot
 
 <img align="right" src="./src/assets/logo-light.svg" width="200">
-Muninn is a Discord bot to add a experience system that members can get by intereating on voice channels.
+Muninn is a Discord bot to add a experience system that members can get by interacting on voice channels.
 
 &nbsp;
 
