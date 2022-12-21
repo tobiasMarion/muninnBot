@@ -1,16 +1,12 @@
 
 # Muninn Bot
 
-<img align="right" src="./src/assets/logo-dark.svg" width="200">
+<img align="right" src="./src/assets/logo-light.svg" width="200">
 Muninn is a Discord bot to add a experience system that members can get by intereating on voice channels.
 
-</br>
+&nbsp;
 
-[<img src="./src/assets/add-button.svg" height="32">](https://discord.com/api/oauth2/authorize?client_id=940773931504267314&permissions=1101961103360&scope=applications.commands%20bot)
-
-</br>
-
----
+[<img src="./src/assets/add-button-light.svg" height="40">](https://discord.com/api/oauth2/authorize?client_id=940773931504267314&permissions=1101961103360&scope=applications.commands%20bot)
 
 ## License
 
