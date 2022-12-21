@@ -12,15 +12,20 @@ module.exports = {
 	async execute(interaction) {
 		const serverId = interaction.guild.id
 		let memberId = interaction.options._hoistedOptions[0]
+		let voiceState
 
-		if (!memberId) {
-			memberId = interaction.user.id
-		} else {
+		if (memberId) {
 			memberId = memberId.user.id
+			voiceState = interaction.options._hoistedOptions[0].member.voice
+		} else {
+			memberId = interaction.user.id
+			voiceState = interaction.member.voice
 		}
 
-		const reply = await CommandsController.position(memberId, serverId)
-		
+		console.log(voiceState)
+
+		const reply = await CommandsController.position(memberId, serverId, voiceState)
+
 		return interaction.reply(reply)
 	},
 }
