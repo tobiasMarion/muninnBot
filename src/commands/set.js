@@ -1,3 +1,4 @@
+const { GatewayIntentBits } = require('discord.js')
 const { SlashCommandBuilder } = require('@discordjs/builders')
 const CommandsController = require('../controllers/CommandsController')
 
@@ -12,11 +13,15 @@ module.exports = {
 				.addChoices(
 					{ name: 'Video', value: 'video' },
 					{ name: 'Streaming', value: 'streaming' },
+					{ name: 'Crowd', value: 'crowd' },
+					{ name: 'Min members to crowd', value: 'minMembersToCrowd'}
+
 				))
 		.addNumberOption(option =>
 			option.setName('value')
 				.setDescription('The xp earned will be multiplied by this constant (We recommend values >= 1)')
-				.setRequired(true)),
+				.setRequired(true))
+		.setDefaultMemberPermissions(GatewayIntentBits.Guilds),
 
 	async execute(interaction) {
 		const serverId = interaction.guild.id

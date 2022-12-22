@@ -16,6 +16,18 @@ const ServerSchema = mongoose.Schema({
     default: 1,
     required: true
   },
+  crowdBonus: {
+    value: {
+      type: Number,
+      default: 1,
+      required: true
+    },
+    minMembersToCrowd: {
+      type: Number,
+      default: 10,
+      required: true
+    }
+  },
   members: [Member]
 })
 
