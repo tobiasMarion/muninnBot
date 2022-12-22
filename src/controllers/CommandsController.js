@@ -18,7 +18,14 @@ module.exports = {
   async set(type, value, serverId) {
     const server = await Server.findById(serverId)
 
-    server[`${type}Bonus`] = value
+    if (type == 'video' || type == 'streaming') {
+      server[`${type}Bonus`] = value
+    } else if (type == 'crowd'){
+      server.crowdBonus.value = value
+    } else {
+      server.crowdBonus.minMembersToCrowd = value
+    }
+
 
     await server.save()
   },

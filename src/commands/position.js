@@ -22,8 +22,6 @@ module.exports = {
 			voiceState = interaction.member.voice
 		}
 
-		console.log(voiceState)
-
 		const reply = await CommandsController.position(memberId, serverId, voiceState)
 
 		return interaction.reply(reply)
