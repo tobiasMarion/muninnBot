@@ -3,3 +3,4 @@ node_modules
 *.log
 discloud.config
 upload.zip
+discloud_backup

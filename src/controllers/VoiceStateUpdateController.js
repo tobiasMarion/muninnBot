@@ -26,11 +26,13 @@ module.exports = {
     await server.save()
   },
 
-  async quit(oldState, newState) {
+  async quit(oldState, newState, crowdBonusCheck) {
+    // Deaf or muted
     const deafOrMuted = oldState.serverDeaf || oldState.selfDeaf || oldState.serverMute || oldState.selfMute
 
     if (deafOrMuted) return
 
+    // Find member
     const serverId = oldState.guild.id
     const memberId = oldState.id
 
@@ -39,7 +41,9 @@ module.exports = {
 
     if (!member) return
 
+    // Calculate bonus
     const { streaming, selfVideo } = oldState
+    let crowd = 1
     const channelId = oldState.channelId
     const channel = await oldState.guild.channels.fetch(channelId)
     const activeMembers = channel.members.filter(member => {
@@ -49,15 +53,31 @@ module.exports = {
       return memberDeafOrMuted ? false : true
     })
 
+    if (activeMembers.size >= server.minMembersToCrowd - 1) {
+      if (crowdBonusCheck) {
+        activeMembers.forEach(member => {
+          const voiceState = member.voice
+  
+          this.quit(voiceState, oldState, false)
+          this.join(voiceState, voiceState)
+        })
+      }
+
+      crowd = server.crowd.value
+    }
+
+
     const now = new Date
 
     let xpEarned = (now.getTime() - member.lastJoin.getTime()) / 10000
 
     xpEarned *= streaming ? server.streamingBonus : 1
     xpEarned *= selfVideo ? server.videoBonus : 1
-    xpEarned *= activeMembers.size >= server.crowdBonus.minMembersToCrowd ? server.crowdBonus.value : 1
+    xpEarned *= crowd
 
     xpEarned = Math.round(xpEarned)
+
+    console.log(xpEarned)
 
     member.currentXp += xpEarned
     await server.save()

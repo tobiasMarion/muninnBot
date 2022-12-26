@@ -66,10 +66,10 @@ client.on('voiceStateUpdate', (oldState, newState) => {
 		VoiceStateUpdate.join(oldState, newState)
 	}
 	else if (newState.channelId === null) {
-		VoiceStateUpdate.quit(oldState, newState)
+		VoiceStateUpdate.quit(oldState, newState, true)
 	}
 	else {
-		VoiceStateUpdate.quit(oldState, newState)
+		VoiceStateUpdate.quit(oldState, newState, true)
 		VoiceStateUpdate.join(oldState, newState)
 	}
 })
