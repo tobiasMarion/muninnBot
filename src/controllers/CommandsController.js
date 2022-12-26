@@ -20,7 +20,7 @@ module.exports = {
 
     if (type == 'video' || type == 'streaming') {
       server[`${type}Bonus`] = value
-    } else if (type == 'crowd'){
+    } else if (type == 'crowd') {
       server.crowdBonus.value = value
     } else {
       server.crowdBonus.minMembersToCrowd = value
@@ -33,7 +33,7 @@ module.exports = {
   async rank(serverId, voiceState) {
 
     if (voiceState.channelId) {
-      await VoiceStateUpdateController.quit(voiceState, voiceState)
+      await VoiceStateUpdateController.quit(voiceState, voiceState, true)
       VoiceStateUpdateController.join(voiceState, voiceState)
     }
 
@@ -70,7 +70,7 @@ module.exports = {
   async position(memberId, serverId, voiceState) {
 
     if (voiceState.channelId) {
-      await VoiceStateUpdateController.quit(voiceState, voiceState)
+      await VoiceStateUpdateController.quit(voiceState, voiceState, true)
       VoiceStateUpdateController.join(voiceState, voiceState)
     }
 
