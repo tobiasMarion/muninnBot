@@ -62,15 +62,19 @@ client.on('guildCreate', ({ id }) => {
 })
 
 client.on('voiceStateUpdate', (oldState, newState) => {
-	if (oldState.channelId === null) {
-		VoiceStateUpdate.join(oldState, newState)
-	}
-	else if (newState.channelId === null) {
-		VoiceStateUpdate.quit(oldState, newState, true)
-	}
-	else {
-		VoiceStateUpdate.quit(oldState, newState, true)
-		VoiceStateUpdate.join(oldState, newState)
+	try {
+		if (oldState.channelId === null) {
+			VoiceStateUpdate.join(oldState, newState)
+		}
+		else if (newState.channelId === null) {
+			VoiceStateUpdate.quit(oldState, newState, true)
+		}
+		else {
+			VoiceStateUpdate.quit(oldState, newState, true)
+			VoiceStateUpdate.join(oldState, newState)
+		}
+	} catch (error) {
+		console.log(error)
 	}
 })
 

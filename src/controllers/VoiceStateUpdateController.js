@@ -77,8 +77,6 @@ module.exports = {
 
     xpEarned = Math.round(xpEarned)
 
-    console.log(xpEarned)
-
     member.currentXp += xpEarned
     await server.save()
   }
